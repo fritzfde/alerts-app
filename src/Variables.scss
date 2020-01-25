@@ -1,0 +1,22 @@
+$color-primary-blue: #00416D;
+$color-secondary-blue: #00A7E6;
+$color-black: #000;
+$color-white: #FFFFFF;
+$color-gray: #6C6C6C;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 668px,
+  md: 1025px,
+  lg: 1400px,
+  xl: 1401px
+);
+
+$container-max-widths: (
+  sm: 986px,
+  md: 1200px,
+  lg: 1400px,
+  xl: 1401px
+);
+
+//@import "../../../../css/scss/abstracts/_variables";
