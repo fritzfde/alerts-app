@@ -16,13 +16,15 @@ class AlertContent extends React.PureComponent {
     render() {
         const {alert, onClickConfirm} = this.props
         return (
-            <div className="alert-content-wrap" data-alert-prio={alert.prio} data-alert-id={alert.id}>
-                <div className="icon" data-prio={PRIO[alert.prio]}>
-                    <i className="material-icons">warning</i>
-                </div>
+            <div className="alert-content-wrap" data-alert-prio={PRIO[alert.prio]} data-alert-id={alert.id}>
                 <div className="alert-content">
-                    <div className="alert-content__headline">
-                        <span className="alert-id">ID: {alert.id}&nbsp;</span><h2>{alert.headline}</h2>
+                    <div className="icon-and-headline-wrap">
+                        <div className="icon" data-prio={PRIO[alert.prio]}>
+                            <i className="material-icons">warning</i>
+                        </div>
+                        <div className="alert-content__headline">
+                            <span className="alert-id">ID: {alert.id}&nbsp;</span><h2>{alert.headline}</h2>
+                        </div>
                     </div>
                     <div className="alert-content__text">
                         <p className="copytext">

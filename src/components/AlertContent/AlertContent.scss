@@ -1,111 +1,181 @@
 @import "../../App";
 
-$color-error: red;
-$color-warning: #faad14;
-$color-info: #00A7E6;
+.alert-content-wrap {
+    margin: 10px 0;
+    border: 2px solid $color-black;
 
-$color-primary-blue: #00416D;
-$color-secondary-blue: #00A7E6;
-$color-text: #00406C;
-$color-light-gray: #CCCACA;
-$color-white: #fff;
+    &[data-alert-prio="error"] {
+        border: 2px solid $color-error;
 
-//// Checkboxes ////
-.checkbox-button {
-    display: block;
-    background-color: #00A7E6;
-    color: $color-white;
-    position: relative;
-    margin: 0;
-    cursor: pointer;
-    user-select: none;
-    padding-left: 14px;
-    padding-right: 82px;
-    height: 60px;
-    line-height: 60px;
-    font-size: 15px;
-    font-weight: bold;
-    /* Hide the browser's default checkbox */
-    input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-    /* Create a custom checkbox */
-    .checkmark {
-        position: absolute;
-        top: 21px;
-        right: 15px;
-        height: 18px;
-        width: 18px;
-        background-color: $color-white;
-        /* Create the checkmark/indicator (hidden when not checked) */
-        &:after {
-            content: "";
-            position: absolute;
-            display: none;
-        }
-        /* Style the checkmark/indicator */
-        &:after {
-            left: 5px;
-            top: 0px;
-            width: 8px;
-            height: 15px;
-            border: solid $color-secondary-blue;
-            border-width: 0 3px 3px 0;
-            transform: rotate(45deg);
+        .alert-content__headline {
+            color: $color-error;
+
+            h2 {
+                color: $color-error;
+            }
         }
     }
-    /* On mouse-over, add a grey background color */
-    &:hover input ~ .checkmark {
-        background-color: $color-white;
+
+    &[data-alert-prio="warning"] {
+        border: 2px solid $color-warning;
+
+        .alert-content__headline {
+            color: $color-warning;
+        }
     }
-    /* When the checkbox is checked, add a blue background */
-    input:checked ~ .checkmark {
-        background-color: $color-white;
+
+    &[data-alert-prio="info"] {
+        border: 2px solid $color-info;
+
+        .alert-content__headline {
+            color: $color-info;
+
+            h2 {
+                font-weight: 300;
+            }
+        }
     }
-    /* Show the checkmark when checked */
-    input:checked ~ .checkmark:after {
-        display: block;
+
+    padding: $icon-size $icon-size 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .alert-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0 10px;
+
+        .icon-and-headline-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .icon {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                top: 10px;
+                left: 10px;
+                width: $icon-size;
+                height: $icon-size;
+                border-radius: 50%;
+                padding: 0 2px 4px;
+                margin-right: $icon-minimal-right-offset;
+
+                i {
+                    font-size: 2rem;
+                    transform: scale(0.75);
+                    color: $color-white;
+                }
+
+                &[data-prio="error"] {
+                    color: $color-error;
+                    background-color: $color-error;
+                }
+
+                &[data-prio="warning"] {
+                    color: $color-warning;
+                    background-color: $color-warning;
+                }
+
+                &[data-prio="info"] {
+                    color: $color-info;
+                    background-color: $color-info;
+                }
+            }
+
+        }
+
+        &__headline {
+            h2 {
+                display: inline-block;
+                margin: 0;
+            }
+
+            .alert-id {
+                //display: inline-block;
+                display: none;
+                font-size: 2em;
+            }
+        }
+
+        .copytext {
+            color: $color-text;
+        }
+
+        &__buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+
+            > div {
+                margin: 5px;
+                min-width: 160px;
+            }
+        }
     }
 }
-///////////
-////// Submit Button /////
-.submit-button {
-    width: 100%;
-    border: none;
-    height: 60px;
-    line-height: 60px;
-    font-size: 15px;
-    font-weight: bold;
-    background-color: $color-primary-blue;
-    color: $color-white;
-    padding: 0 30px;
-    &:disabled {
-        background-color: $color-light-gray;
-    }
-}
-///////////
 
 @include media-breakpoint-up(sm) {
-    .checkbox-button {
-        height: 50px;
-        line-height: 50px;
-        .checkmark {
-            top: 16px;
-        }
+    $icon-minimal-right-offset: 20px;
+    .ant-modal {
+        min-width: 60% !important;
     }
-    .submit-button {
-        height: 50px;
-        line-height: 50px;
+    .alert-content-wrap {
+        flex-direction: row;
+        align-items: flex-start;
+
+        .alert-content {
+            .icon-and-headline-wrap {
+                .icon {
+                    margin-left: 0;
+                    margin-right: calc(#{$icon-minimal-right-offset});
+                }
+            }
+
+            &__text {
+                margin: 0 calc(#{$icon-size} + #{$icon-minimal-right-offset});
+            }
+
+            &__buttons {
+                margin: 0 calc(#{$icon-size} + #{$icon-minimal-right-offset});
+                flex-direction: row;
+                justify-content: space-between;
+
+                > div {
+                    min-width: auto;
+                }
+            }
+        }
     }
 }
 
+@include media-breakpoint-up(md) {
+    $icon-minimal-right-offset: 40px;
+    .alert-content-wrap {
+        .alert-content {
+            .icon-and-headline-wrap {
+                .icon {
+                    margin-left: 0;
+                    margin-right: calc(#{$icon-minimal-right-offset});
+                }
+            }
 
-.primary-button {
-    padding: 0 20px;
-    margin: 0 10px;
-    color: $color-white;
+            &__text {
+                margin: 0 calc(#{$icon-size} + #{$icon-minimal-right-offset});
+            }
+
+            &__buttons {
+                margin: 0 calc(#{$icon-size} + #{$icon-minimal-right-offset});
+            }
+        }
+    }
 }

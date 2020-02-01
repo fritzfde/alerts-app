@@ -1,9 +1,3 @@
-$color-primary-blue: #00416D;
-$color-secondary-blue: #00A7E6;
-$color-black: #000;
-$color-white: #FFFFFF;
-$color-gray: #6C6C6C;
-
 $grid-breakpoints: (
   xs: 0,
   sm: 668px,
@@ -20,3 +14,17 @@ $container-max-widths: (
 );
 
 //@import "../../../../css/scss/abstracts/_variables";
+
+$color-black: #000;
+$color-error: red;
+$color-warning: #fa8800;
+$color-info: #faad14;
+
+$color-primary-blue: #00416D;
+$color-secondary-blue: #00A7E6;
+$color-text: #00406C;
+$color-light-gray: #CCCACA;
+$color-white: #fff;
+
+$icon-size: 32px;
+$icon-minimal-right-offset: 10px;

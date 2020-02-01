@@ -1,69 +1,47 @@
 import base64 from 'base-64'
-import {alertConfig} from '../config'
+import alertConfig from '../config'
+import "isomorphic-fetch"
 
-const API_URL = alertConfig.API_URL
 const AUTH_HEADER = {Authorization: `Basic ${base64.encode(`${alertConfig.USERNAME}:${alertConfig.PASSWORD}`)}`}
 const DELAY = alertConfig.DELAY
+const USER_ID = alertConfig.USER_ID
 
-let serverUrl = API_URL
-
-function getAlerts(callback) {
-    fetch(serverUrl, {})
-        .then(
-            (response) => response.json()
-        )
-        .then((json) => callback(json))
+function getAlerts(serverUrl) {
+    return fetch(serverUrl, {})
+        .then((response) => response.json())
 }
 
-function onNotify(callback) {
-    getAlerts(callback)
-    setInterval(() => getAlerts(callback), DELAY)
+function onNotify(callback, serverUrl) {
+    getAlerts(serverUrl)
+        .then(callback)
+    let intervalId = setInterval(() => getAlerts(serverUrl)
+        .then(callback), DELAY)
+    return () => clearInterval(intervalId)
 }
 
-function generateAlert(prio) {
-    let today = new Date()
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0') // January is 0!
-    const h = String(today.getHours()) // January is 0!
-    const m = String(today.getMinutes()) // January is 0!
-    const s = String(today.getSeconds()).padStart(2, '0')
-    const created = String(today.getTime())
-    today = `${dd}.${mm}, ${h}:${m}:${s}`
-    const headline = `Wichtige Info - Alert Prio ${prio} - ${today}`
-
-    // const prio = Math.ceil(Math.random() * 3)
-    const text = `${today} –— Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolordolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor`
-    const maxLength = Math.ceil(Math.random() * 290) + 10
-    const content = text.slice(0, maxLength)
-
-    return {
-        prio,
-        headline,
-        content,
-        created
-    }
-}
-
-function createAlert(prio) {
-    return fetch(serverUrl, {
+function createAlert(alert, serverUrl) {
+    return fetch(`${serverUrl}?userid=${USER_ID}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             AUTH_HEADER
         },
-        body: JSON.stringify(generateAlert(prio)) // body data type must match "Content-Type" header
-    }).then(response => response.json())
+        body: JSON.stringify(alert) // body data type must match "Content-Type" header
+    })
+        .then(response => response.json())
 }
 
-function deleteAlert(alertId) {
-    return fetch(serverUrl + '/' + alertId, {
+function deleteAlert(alertId, serverUrl) {
+    return fetch(`${serverUrl}/${alertId}?userid=${USER_ID}`, {
         method: 'DELETE',
-        headers: { AUTH_HEADER }
-    }).then(response => response.json())
+        headers: {AUTH_HEADER}
+    })
+        .then(response => response.json())
 }
 
 export {
     onNotify,
     createAlert,
-    deleteAlert
+    deleteAlert,
+    getAlerts
 }

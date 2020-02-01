@@ -1,0 +1,112 @@
+@import "../../App";
+
+//// Checkboxes ////
+.checkbox-button {
+    display: block;
+    background-color: #00A7E6;
+    color: $color-white;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    padding-left: 14px;
+    padding-right: 82px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 15px;
+    font-weight: bold;
+    /* Hide the browser's default checkbox */
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 21px;
+        right: 15px;
+        height: 18px;
+        width: 18px;
+        background-color: $color-white;
+        /* Create the checkmark/indicator (hidden when not checked) */
+        &:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Style the checkmark/indicator */
+        &:after {
+            left: 5px;
+            top: 0px;
+            width: 8px;
+            height: 15px;
+            border: solid $color-secondary-blue;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+    }
+
+    /* On mouse-over, add a grey background color */
+    &:hover input ~ .checkmark {
+        background-color: $color-white;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    input:checked ~ .checkmark {
+        background-color: $color-white;
+    }
+
+    /* Show the checkmark when checked */
+    input:checked ~ .checkmark:after {
+        display: block;
+    }
+}
+
+///////////
+
+
+////// Submit Button /////
+.submit-button {
+    width: 100%;
+    border: none;
+    height: 60px;
+    line-height: 60px;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: $color-primary-blue;
+    color: $color-white;
+    padding: 0 30px;
+
+    &:disabled {
+        background-color: $color-light-gray;
+    }
+}
+
+///////////
+
+@include media-breakpoint-up(sm) {
+    .checkbox-button {
+        height: 50px;
+        line-height: 50px;
+
+        .checkmark {
+            top: 16px;
+        }
+    }
+    .submit-button {
+        height: 50px;
+        line-height: 50px;
+    }
+}
+
+
+.primary-button {
+    padding: 0 20px;
+    margin: 0 10px;
+    color: $color-white;
+}
