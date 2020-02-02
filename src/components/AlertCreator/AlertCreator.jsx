@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
 import {Button, Input, Select} from 'antd'
 import "isomorphic-fetch"
-import { collection } from "./../../models/ServerCollection"
-import { store } from "./../../stores/TodoStore"
 import { observer } from "mobx-react";
+
+import collection from "./../../models/ServerCollection"
+import store from "./../../stores/TodoStore"
 
 const {TextArea} = Input
 const {Option} = Select
 
-@observer
-class AlertCreator extends Component {
+@observer class AlertCreator extends Component {
 
     state = {
         alertHeadline: '',
@@ -64,6 +64,12 @@ class AlertCreator extends Component {
         this.state.alertHeadline = `${this.state.alertHeadline}`
         this.state.alertText = `${currentDateString} –— ${this.state.alertText}`
         this.disableUnavailable()
+
+        console.log('store')
+        console.log('store, ', store)
+        console.log('store.todos[0],', store.todos[0])
+        console.log('store.filter,', store.filter)
+        console.log('Collection', collection)
     }
 
     disableUnavailable() {
@@ -168,7 +174,6 @@ class AlertCreator extends Component {
         ))
 
         return (
-
             <div className={className} style={{display: disabled && 'none'}}>
                 <div className="row" style={{padding: 20}}>
                     <h2>Create Alert:</h2>

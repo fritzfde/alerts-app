@@ -31,15 +31,16 @@ class ServersCollection {
     @observable filter = ''
 }
 
-const collection = window.collection = new ServersCollection
-// Object.assign(window.collection, new ServersCollection())
+const collection = window.collection = new ServersCollection()
 
 export default collection
 
 autorun(() => {
-    console.log('Collection.Servers')
-    console.log(collection.servers)
-    console.log(collection.servers[0])
-    // console.log(collection.servers[0]['url'])
-    console.log(collection.filter)
+    // console.log('Collection.Servers')
+    // console.log(collection.servers)
+    // console.log(collection.servers[0])
+    console.log(collection.servers[0].url)
+    console.log(collection.servers[1].url)
+    console.log(collection.servers[2].url)
+    // console.log(collection.filter)
 })
