@@ -12,5 +12,5 @@ export default store
 autorun(() => {
     // console.log('store')
     // console.log(store.filter)
-    console.log(store.todos[0])
+    // console.log(store.todos[0])
 })

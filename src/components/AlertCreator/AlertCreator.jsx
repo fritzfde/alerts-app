@@ -4,7 +4,6 @@ import "isomorphic-fetch"
 import { observer } from "mobx-react";
 
 import collection from "./../../models/ServerCollection"
-import store from "./../../stores/TodoStore"
 
 const {TextArea} = Input
 const {Option} = Select
@@ -13,39 +12,12 @@ const {Option} = Select
 
     state = {
         alertHeadline: '',
-        alertText: '',
-        serverList: []
+        alertText: ''
     }
 
     initialState = {
         alertHeadline: 'Wichtige Info',
         alertText: 'Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolordolor, Lorem ipsum dolor, Lorem ipsum dolor, Lorem ipsum dolor',
-        serverList: [
-            {
-                url: 'http://localhost:3000/alerts',
-                disabled: false
-            },
-            {
-                url: 'http://85.22.63.157:3000/alerts',
-                disabled: false
-            },
-            {
-                url: 'http://my-json-server.typicode.com/fritzfde/tr/alerts',
-                disabled: false
-            },
-            {
-                url: '../../jsonData/alerts.json',
-                disabled: false
-            },
-            {
-                url: '../../jsonData/alerts12.json',
-                disabled: false
-            },
-            {
-                url: '../../jsonData/alerts3.json',
-                disabled: false
-            }
-        ]
     }
     defBlockStyle = {
         display: 'inline-block',
@@ -55,25 +27,25 @@ const {Option} = Select
     constructor(props) {
         super(props)
         this.state = this.initialState
-        this.state.serverList.push({
+        // this.state.serverList.push({
+        //     url: this.props.serverUrl,
+        //     disabled: false
+        // })
+        collection.servers.push({
             url: this.props.serverUrl,
             disabled: false
         })
-        const currentDateString = AlertCreator.getCurrentDateString()
-        this.state.serverList = this.removeDuplicates(this.state.serverList, 'url')
+        // this.state.serverList = this.removeDuplicates(this.state.serverList, 'url')
+        collection.servers = this.removeDuplicates(collection.servers, 'url')
         this.state.alertHeadline = `${this.state.alertHeadline}`
+        const currentDateString = AlertCreator.getCurrentDateString()
         this.state.alertText = `${currentDateString} –— ${this.state.alertText}`
         this.disableUnavailable()
-
-        console.log('store')
-        console.log('store, ', store)
-        console.log('store.todos[0],', store.todos[0])
-        console.log('store.filter,', store.filter)
-        console.log('Collection', collection)
     }
 
     disableUnavailable() {
-        const servers = this.state.serverList
+        // const servers = this.state.serverList
+        const servers = collection.servers
         for (var i = 0, len = servers.length; i < len; i++) {
             this.fetchWithTimeout(servers[i], 1000)
         }
@@ -101,20 +73,22 @@ const {Option} = Select
                     reject(err)
                 })
         })
-            .then(function () {
+            .then((response) => response.json())
+            .then((response) => {
             })
-            .catch(() => this.disableServerInList(url))
+            .catch(() => {
+                this.disableServerInList(url)
+            })
+            .catch(function() {
+            })
     }
 
     disableServerInList = (toBeDisabledUrl) => {
-        const nextState = this.state
-        for (var i = 0, len = nextState.serverList.length; i < len; i++) {
-            nextState.serverList[i].disabled = false
-            if (nextState.serverList[i].url === toBeDisabledUrl) {
-                nextState.serverList[i].disabled = true
+        for (var i = 0, len = collection.servers.length; i < len; i++) {
+            if (collection.servers[i].url === toBeDisabledUrl) {
+                collection.servers[i].disabled = true
             }
         }
-        this.setState(nextState)
     }
 
     static getCurrentDateString() {
@@ -164,7 +138,7 @@ const {Option} = Select
     render() {
         // console.log('creator Render')
         const {className, disabled, onServerChange, serverUrl, config} = this.props
-        const optionsServerList = this.state.serverList.map((item) => (
+        const optionsServerList = collection.servers.map((item) => (
             <Option
                 key={item.url}
                 disabled={item.disabled}
