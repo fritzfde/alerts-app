@@ -12,7 +12,6 @@ class Alert extends Component {
     }
 
     constructor(props) {
-        console.clear()
         super(props)
         this.state = {
             alerts: [],

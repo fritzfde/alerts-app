@@ -1,11 +1,14 @@
-import {Button, Input, Select} from 'antd'
 import React, {Component} from 'react'
+import {Button, Input, Select} from 'antd'
 import "isomorphic-fetch"
+import { collection } from "./../../models/ServerCollection"
+import { store } from "./../../stores/TodoStore"
+import { observer } from "mobx-react";
 
 const {TextArea} = Input
 const {Option} = Select
 
-
+@observer
 class AlertCreator extends Component {
 
     state = {
@@ -63,43 +66,11 @@ class AlertCreator extends Component {
         this.disableUnavailable()
     }
 
-    static getCurrentDateString() {
-        let today = new Date()
-        const dd = String(today.getDate())
-            .padStart(2, '0')
-        const mm = String(today.getMonth() + 1)
-            .padStart(2, '0') // January is 0!
-        const h = String(today.getHours()) // January is 0!
-        const m = String(today.getMinutes()) // January is 0!
-        const s = String(today.getSeconds())
-            .padStart(2, '0')
-        return `${dd}.${mm}, ${h}:${m}:${s}`
-    }
-
-    static generateAlert(params) {
-        const alert = params
-        let today = new Date()
-        alert.created = String(today.getTime())
-        alert.headline = alert.headline
-        alert.content = alert.text
-
-        return alert
-    }
-
-    removeDuplicates(array, key) {
-        let lookup = new Set()
-        return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]))
-    }
-
-    disableServerInList = (toBeDisabledUrl) => {
-        const nextState = this.state
-        for (var i = 0, len = nextState.serverList.length; i < len; i++) {
-            nextState.serverList[i].disabled = false
-            if (nextState.serverList[i].url === toBeDisabledUrl) {
-                nextState.serverList[i].disabled = true
-            }
+    disableUnavailable() {
+        const servers = this.state.serverList
+        for (var i = 0, len = servers.length; i < len; i++) {
+            this.fetchWithTimeout(servers[i], 1000)
         }
-        this.setState(nextState)
     }
 
     fetchWithTimeout(server, delay) {
@@ -129,11 +100,43 @@ class AlertCreator extends Component {
             .catch(() => this.disableServerInList(url))
     }
 
-    disableUnavailable() {
-        const servers = this.state.serverList
-        for (var i = 0, len = servers.length; i < len; i++) {
-            this.fetchWithTimeout(servers[i], 1000)
+    disableServerInList = (toBeDisabledUrl) => {
+        const nextState = this.state
+        for (var i = 0, len = nextState.serverList.length; i < len; i++) {
+            nextState.serverList[i].disabled = false
+            if (nextState.serverList[i].url === toBeDisabledUrl) {
+                nextState.serverList[i].disabled = true
+            }
         }
+        this.setState(nextState)
+    }
+
+    static getCurrentDateString() {
+        let today = new Date()
+        const dd = String(today.getDate())
+            .padStart(2, '0')
+        const mm = String(today.getMonth() + 1)
+            .padStart(2, '0') // January is 0!
+        const h = String(today.getHours()) // January is 0!
+        const m = String(today.getMinutes()) // January is 0!
+        const s = String(today.getSeconds())
+            .padStart(2, '0')
+        return `${dd}.${mm}, ${h}:${m}:${s}`
+    }
+
+    static generateAlert(params) {
+        const alert = params
+        let today = new Date()
+        alert.created = String(today.getTime())
+        alert.headline = alert.headline
+        alert.content = alert.text
+
+        return alert
+    }
+
+    removeDuplicates(array, key) {
+        let lookup = new Set()
+        return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]))
     }
 
     onChange = (event) => {
@@ -165,6 +168,7 @@ class AlertCreator extends Component {
         ))
 
         return (
+
             <div className={className} style={{display: disabled && 'none'}}>
                 <div className="row" style={{padding: 20}}>
                     <h2>Create Alert:</h2>
